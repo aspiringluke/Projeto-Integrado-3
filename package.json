@@ -1,17 +1,18 @@
 {
   "name": "projeto-integrado-3",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Projeto integrado do módulo de Aplicação Web",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aspiringluke/Projeto-Integrado-3.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Enzo Daniel Abreu, Gabriel da Silva Freitas, José Carlos Pereira Neto, Lucas Paulino Gomes, Thierry Antonello Pengo",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/aspiringluke/Projeto-Integrado-3/issues"

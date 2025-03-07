@@ -1,0 +1,27 @@
+{
+  "name": "projeto-integrado-3",
+  "version": "1.0.0",
+  "description": "Projeto integrado do módulo de Aplicação Web",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aspiringluke/Projeto-Integrado-3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aspiringluke/Projeto-Integrado-3/issues"
+  },
+  "homepage": "https://github.com/aspiringluke/Projeto-Integrado-3#readme",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "knex": "^3.1.0",
+    "mysql2": "^3.13.0",
+    "nodemon": "^3.1.9"
+  }
+}

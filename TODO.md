@@ -1,6 +1,6 @@
 # Lista de tarefas
 
-- Configuração do ambiente de desenvolvimento           07/03
+- OK: Configuração do ambiente de desenvolvimento           07/03
 - Criação da estrutura base do projeto                  08~09/03
 - Configurar o MySQL                                    10/03
     - Modelagem -> Tabelas

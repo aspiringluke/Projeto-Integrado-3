@@ -10,7 +10,7 @@ class UsersService
     {
         try
         {
-            let users = await knex.select(["id","name","email"]).table("users");
+            let users = await knex.select(["idusuarios","name","email"]).table("usuarios");
             console.log(users);
         } catch (error)
         {

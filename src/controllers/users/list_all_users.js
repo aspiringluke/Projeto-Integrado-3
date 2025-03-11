@@ -11,6 +11,11 @@ class UserController
     {
         // ^ mais coisas
     }
+
+    async postUser()
+    {
+        // ^ outras coisas
+    }
 }
 
 class ListAllUsers
@@ -20,6 +25,7 @@ class ListAllUsers
     {
         // req = requerer, res = response
         let result = await UsersService.findAll();
+
         console.log(result);
     }
 }

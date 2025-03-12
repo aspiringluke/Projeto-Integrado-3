@@ -27,7 +27,7 @@ class ListAllUsers
         let result = await UsersService.findAll();
 
         // TODO: Pesquisar sobre como devolver um JSON pro front
-        console.log(result);
+        res.send(result);
     }
 }
 

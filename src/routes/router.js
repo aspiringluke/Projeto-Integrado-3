@@ -6,6 +6,7 @@ const router = express.Router();
 
 const userRoute = require('./userRoute');
 const pedidoRoute = require('./pedidoRoute');
+const produtoRoute = require('./produtoRoute');
 
 // rota url
 // rota de listar os usuários
@@ -13,6 +14,7 @@ const pedidoRoute = require('./pedidoRoute');
 // para listar os usuários, é 'users'
 router.use('/users', userRoute);
 router.use('/pedidos', pedidoRoute);
+router.use('/produtos', produtoRoute);
 
 // TODO: Criar as rotas GET dos outros dois arquivos
 

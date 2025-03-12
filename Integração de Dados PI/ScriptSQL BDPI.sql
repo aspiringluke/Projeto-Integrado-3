@@ -1,7 +1,22 @@
+-- Criando banco 'sistema_vendas'
 CREATE DATABASE sistema_vendas;
+-- Colocando o banco em uso
 USE sistema_vendas;
 
+-- Desativando temporariamente a verificação de chaves estrangeiras
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Dropar as tabelas(qualuer ordem)
 DROP TABLE IF EXISTS usuarios;
+DROP TABLE IF EXISTS clientes;
+DROP TABLE IF EXISTS produtos;
+DROP TABLE IF EXISTS pedidos;
+DROP TABLE IF EXISTS itenspedido;
+
+-- Reativar a verificação de chaves estrangeiras
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- Criando a tablea 'usuarios'
 CREATE TABLE usuarios (
     idUsuario INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45) NOT NULL,
@@ -10,7 +25,7 @@ CREATE TABLE usuarios (
     tipo ENUM('admin', 'vendedor') NOT NULL
 );
 
-DROP TABLE IF EXISTS clientes;
+-- Criando a tablea 'clientes'
 CREATE TABLE clientes (
     idCliente INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45) NOT NULL,
@@ -20,7 +35,7 @@ CREATE TABLE clientes (
     telefone VARCHAR(20)
 );
 
-DROP TABLE IF EXISTS produtos;
+-- Criando a tablea 'produtos'
 CREATE TABLE produtos (
     idProduto INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(60) NOT NULL,
@@ -28,7 +43,7 @@ CREATE TABLE produtos (
     valorUnitario DECIMAL(10,2) NOT NULL
 );
 
-DROP TABLE IF EXISTS pedidos;
+-- Criando a tablea 'pedidos'
 CREATE TABLE pedidos (
     idPedido INT PRIMARY KEY AUTO_INCREMENT,
     idUsuario INT NOT NULL,
@@ -39,7 +54,7 @@ CREATE TABLE pedidos (
     FOREIGN KEY (idCliente) REFERENCES clientes(idCliente) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS itensPedido;
+-- Criando a tablea 'itensPedido'
 CREATE TABLE itensPedido (
     idItemPedido INT PRIMARY KEY AUTO_INCREMENT,
     idPedido INT NOT NULL,

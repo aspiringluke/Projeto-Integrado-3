@@ -12,4 +12,6 @@ const userRoute = require('./userRoute')
 // para listar os usuários, é 'users'
 router.use('/users', userRoute);
 
+// TODO: Criar as rotas GET dos outros dois arquivos
+
 module.exports = router;

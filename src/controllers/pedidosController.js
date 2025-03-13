@@ -1,11 +1,14 @@
-// TODO: importar o modelo
+const pedidos = require('../models/Pedidos');
 
 class PedidoController
 {
-    async getPedido(req,res)
+    async listAll(req,res)
     {
-        // pede do banco
-        console.log('Deu certo');
+        const result = await pedidos.findAll();
+
+        ! (result.valid)
+        ? res.status(404).json({success: false, message: result.error})
+        : res.status(200).json({success: true, values: result.values});
     }
 }
 

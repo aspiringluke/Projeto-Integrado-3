@@ -3,7 +3,12 @@ class ProdutoController
     async getProduto(req,res)
     {
         // pede do banco
-        console.log('Deu certo');
+        let dict = {
+            '1': 'um'
+        ,   '2': 'dois'
+        ,
+        }
+        res.json(dict);
     }
 }
 

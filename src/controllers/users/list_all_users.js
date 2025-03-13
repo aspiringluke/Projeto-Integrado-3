@@ -26,8 +26,18 @@ class ListAllUsers
         // req = requerer, res = response
         let result = await UsersService.findAll();
 
+        let dict = {}
+
+        console.log(typeof result);
+
+        for(let i = 0; i<result.length; i++)
+        {
+            dict[`user${i}`] = result[i];
+        }
+
+        console.log(dict);
         // TODO: Pesquisar sobre como devolver um JSON pro front
-        res.send(result);
+        res.json(dict);
     }
 }
 

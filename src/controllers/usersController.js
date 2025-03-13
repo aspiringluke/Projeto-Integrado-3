@@ -9,8 +9,8 @@ class UsersController
         let result = await Users.findAll();
         
         ! (result.valid)
-        ? res.status(404).json({success: false, message: result.error})
-        : res.status(418).json({success: true, values: result.values});
+        ? res.status(418).json({success: false, message: result.error})
+        : res.status(200).json({success: true, values: result.values});
     }
 }
 

@@ -3,8 +3,8 @@ const router = express.Router();
 
 // import de classes
 // requerer o método de listar todos
-const ListAllUser = require('../controllers/users/list_all_users');
+const usersController = require('../controllers/usersController');
 
-router.get('/', ListAllUser.listAll);
+router.get('/', usersController.listAll);
 
 module.exports = router;

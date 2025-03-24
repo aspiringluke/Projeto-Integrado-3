@@ -17,8 +17,23 @@ class Users
             return {valid: false, error: error};
         }
     }
-}
+    
+    async findById(id)
+    {
+        try
+        {
+            let user = await knex.select(["idUsuarios","nome","email"]).table("usuarios").where({idUsuarios: id});
+        
+        return (user.length > 0)
+        ? {valid: true, values: user}
+        : {valid: true, values: undefined};
+        } catch (error)
+        {
+            return {valid: false, error: error};
+        }
+    }
 
+}
 
 
 module.exports = new Users();

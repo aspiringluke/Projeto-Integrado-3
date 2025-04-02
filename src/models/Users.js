@@ -33,6 +33,18 @@ class Users
         }
     }
 
+    async create(newUser)
+    {
+        try {
+            await knex
+                .insert({nome: `${newUser.nome}`, email: `${newUser.email}`, senha: `${newUser.senha}`, funcao_idfuncao: `${newUser.funcao}`})
+                .into('usuarios');
+            return {valid: true};
+        } catch (error) {
+            console.log(error);
+            return {valid: false, error: error};
+        }
+    }
 }
 
 

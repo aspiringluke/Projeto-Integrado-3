@@ -27,6 +27,23 @@ class UsersController
             : res.status(200).json({success: true, values: result.values});
         }
     }
+
+
+
+    async createUser(req,res)
+    {
+        /**
+         * Aqui provavelmente vão as verificações
+         * de dados mais complexas, considerando que
+         * o frontend provavelmente já irá verificar de antemão
+         */
+        
+        let result = await Users.create(req.body);
+
+        result.valid
+        ? res.status(201).json({success: true, message: "Usuário criado com sucesso"})
+        : res.status(500).json({success: true, message: result.error});
+    }
 }
 
 module.exports = new UsersController();

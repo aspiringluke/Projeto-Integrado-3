@@ -43,6 +43,20 @@ class UsersController
         result.valid
         ? res.status(201).json({success: true, message: "Usuário criado com sucesso"})
         : res.status(500).json({success: false, message: result.error});
+
+
+    async updateUser(req,res)
+    {
+        let result = await Users.update(
+            req.body.idUsuarios,
+            req.body.coluna,
+            req.body.valor
+        );
+
+        ! (result.valid)
+        ? res.status(404).json({success: false, message: result.error})
+        : res.status(200).json({success: true, message: `${req.body.coluna} atualizado(a) com sucesso`});
+    }
     }
 }
 

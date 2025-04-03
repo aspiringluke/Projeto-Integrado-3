@@ -45,6 +45,26 @@ class Users
             return {valid: false, error: error};
         }
     }
+
+    /**
+     * Funciona apenas para um único valor.
+     * Precisa permitir atualização de colunas simultâneas
+     * ou pelo menos várias iterações.
+     * Também é preciso impedir a alteração de IDs
+     */
+    async update(id, coluna, novoValor)
+    {
+        try {
+            // deveria enviar de volta os dados para confirmação?
+            await knex('usuarios')
+                .where({idUsuarios: id})
+                .update(coluna, novoValor);
+            
+            return {valid: true};
+        } catch (error) {
+            return {valid: false, error: error};
+        }
+    }
 }
 
 

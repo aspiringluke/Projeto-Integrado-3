@@ -57,6 +57,16 @@ class UsersController
         ? res.status(404).json({success: false, message: result.error})
         : res.status(200).json({success: true, message: `${req.body.coluna} atualizado(a) com sucesso`});
     }
+
+
+    async deleteUser(req,res)
+    {
+        // não seria melhor passar o id como parâmetro?
+        let result = await Users.delete(req.body.id);
+
+        ! (result.valid)
+        ? res.status(404).json({success: false, message: result.error})
+        : res.status(200).json({success: true, message: `Deletado(a) com sucesso`});
     }
 }
 

@@ -65,6 +65,19 @@ class Users
             return {valid: false, error: error};
         }
     }
+
+    async delete(id)
+    {
+        try {
+            await knex('usuarios')
+                .where({idUsuarios: id})
+                .del();
+            
+            return {valid: true};
+        } catch (error) {
+            return {valid: false, error: error};
+        }
+    }
 }
 
 

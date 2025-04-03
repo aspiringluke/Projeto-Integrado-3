@@ -34,7 +34,12 @@ class Users
     {
         try {
             await knex
-                .insert({nome: `${newUser.nome}`, email: `${newUser.email}`, senha: `${newUser.senha}`, funcao_idfuncao: `${newUser.funcao}`})
+                .insert({
+                    nome: `${newUser.nome}`,
+                    email: `${newUser.email}`,
+                    senha: `${newUser.senha}`,
+                    funcao_idfuncao: `${newUser.funcao}`
+                })
                 .into('usuarios');
             return {valid: true};
         } catch (error) {

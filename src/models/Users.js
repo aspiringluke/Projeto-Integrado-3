@@ -58,11 +58,12 @@ class Users
     {
         try {
             // deveria enviar de volta os dados para confirmação?
-            await knex('usuarios')
+            let linhasAfetadas = await knex('usuarios')
                 .where({idUsuarios: id})
                 .update(coluna, novoValor);
             
-            return {valid: true};
+            console.log("Linhas afetadas: " + linhasAfetadas);
+            return {valid: true, linhasAfetadas: linhasAfetadas};
         } catch (error) {
             return {valid: false, error: error};
         }
@@ -71,11 +72,12 @@ class Users
     async delete(id)
     {
         try {
-            await knex('usuarios')
+            let linhasAfetadas = await knex('usuarios')
                 .where({idUsuarios: id})
                 .del();
             
-            return {valid: true};
+            console.log("Linhas afetadas: " + linhasAfetadas);
+            return {valid: true, linhasAfetadas: linhasAfetadas};
         } catch (error) {
             return {valid: false, error: error};
         }

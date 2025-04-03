@@ -56,9 +56,14 @@ class UsersController
             req.body.valor
         );
 
-        ! (result.valid)
-        ? res.status(404).json({success: false, message: result.error})
-        : res.status(200).json({success: true, message: `${req.body.coluna} atualizado(a) com sucesso`});
+        if (!(result.valid)){
+            res.status(500).json({success: false, message: result.error})
+        }
+        else {
+            result.linhasAfetadas == 0
+            ? res.status(404).json({success: false, message: "Não há nenhum usuário com esse ID."})
+            : res.status(200).json({success: true, message: `${req.body.coluna} atualizado(a) com sucesso`});
+        }
     }
 
 
@@ -67,9 +72,14 @@ class UsersController
         // não seria melhor passar o id como parâmetro?
         let result = await Users.delete(req.body.id);
 
-        ! (result.valid)
-        ? res.status(404).json({success: false, message: result.error})
-        : res.status(200).json({success: true, message: `Deletado(a) com sucesso`});
+        if (!(result.valid)){
+            res.status(500).json({success: false, message: result.error})
+        }
+        else {
+            result.linhasAfetadas == 0
+            ? res.status(404).json({success: false, message: "Não existe nenhum usuário com este ID."})
+            : res.status(200).json({success: true, message: `Deletado(a) com sucesso`});
+        }
     }
 }
 

@@ -6,7 +6,8 @@ const usersController = require('../controllers/usersController');
 router.get('/', usersController.listAll);
 router.get('/:id', usersController.listOne);
 
-router.post('/create', usersController.createUser)
+router.post('/', usersController.createUser);
+
 /**
  * "The difference between the POST and PUT APIs can be observed
  * in request URIs. POST requests are made on resource collections,

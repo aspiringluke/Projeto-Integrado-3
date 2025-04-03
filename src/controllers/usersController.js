@@ -1,5 +1,9 @@
 const Users = require('../models/Users');
 
+/**
+ * TODO: Adicionar verificações dos parâmetros em todas as queries
+ */
+
 class UsersController
 {
     async listAll(req,res)

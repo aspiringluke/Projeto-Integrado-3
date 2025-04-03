@@ -3,6 +3,18 @@ const router = express.Router();
 
 const usersController = require('../controllers/usersController');
 
+
+/**
+ * Rota principal (/users).
+ * As operações CRUD não serão indicadas na URI. Ao invés disso,
+ * serão utilizados os próprios métodos HTTP para indicar qual
+ * operação está sendo realizada. Abaixo a relação:
+ * 
+ * GET     =>  SELECT
+ * POST    =>  INSERT
+ * PUT     =>  UPDATE
+ * DELETE  =>  DELETE
+ */
 router.get('/', usersController.listAll);
 router.get('/:id', usersController.listOne);
 

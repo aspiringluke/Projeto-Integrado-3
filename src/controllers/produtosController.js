@@ -8,7 +8,6 @@ class ProdutoControllers
         
         async listAll(req,res)
         {
-            // req = requerer, res = response
             let result = await Produto.findAll();
             
             ! (result.valid)

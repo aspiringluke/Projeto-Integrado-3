@@ -1,11 +1,8 @@
-// importar a conexão com o banco
-const knex = require('../config/data'); // é a ponte que liga este arquivo ao banco de dados
+const knex = require('../config/data');
 
 
 class Users
 {
-    // criar um método para buscar todos os usuários
-    // vamos impedir o código de continuar até que as informações sejam retornada
     async findAll()
     {
         try

@@ -3,9 +3,13 @@ const router = express.Router();
 
 const usersController = require('../controllers/usersController');
 
+/**
+ * |===============================|
+ * |========= ROTA /users =========|
+ * |===============================|
+ */
 
 /**
- * Rota principal (/users).
  * As operações CRUD não serão indicadas na URI. Ao invés disso,
  * serão utilizados os próprios métodos HTTP para indicar qual
  * operação está sendo realizada. Abaixo a relação:

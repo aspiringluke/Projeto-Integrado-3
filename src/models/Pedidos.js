@@ -33,5 +33,23 @@ class Pedidos
         return {valid: false, error: error};
         }
     }
+
+    async create(newPedido)
+    {
+        try {
+            await knex
+                .insert({
+                    status: `${newPedido.status}`,
+                    data: `${newPedido.data}`,
+                })
+                .into('pedidos');
+            return {valid: true};
+        } catch (error) {
+            console.log(error);
+            return {valid: false, error: error};
+        }
+    }
+
+
 }
 module.exports = new Pedidos();

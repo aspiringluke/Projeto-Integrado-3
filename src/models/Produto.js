@@ -30,8 +30,51 @@ class Produto
         }
     }
 
+    async create(newProduto)
+    {
+        try {
+            await knex
+                .insert({
+                    nome: `${newProduto.nome}`,
+                    descricao: `${newProduto.descricao}`,
+                    valorUnitario: `${newProduto.valorUnitario}`
+                })
+                .into('produtos');
+            return {valid: true};
+        } catch (error) {
+            console.log(error);
+            return {valid: false, error: error};
+        }
+    }
 
+    async update(id, coluna, novoValor)
+    {
+        try {
+            // deveria enviar de volta os dados para confirmação?
+            let linhasAfetadas = await knex('produtos')
+                .where({idprodutos: id})
+                .update(coluna, novoValor);
+            
+            console.log("Linhas afetadas: " + linhasAfetadas);
+            return {valid: true, linhasAfetadas: linhasAfetadas};
+        } catch (error) {
+            return {valid: false, error: error};
+        }
+    }
 
+    async delete(id)
+    {
+        try {
+            let linhasAfetadas = await knex('produtos')
+                .where({idprodutos: id})
+                .del();
+            
+            console.log("Linhas afetadas: " + linhasAfetadas);
+            return {valid: true, linhasAfetadas: linhasAfetadas};
+        } catch (error) {
+            return {valid: false, error: error};
+        }
+    }
 
 }
 

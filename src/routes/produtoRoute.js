@@ -13,4 +13,10 @@ router.get('/', ProdutoController.listAll);
 
 router.get('/:id', ProdutoController.listOne);
 
+router.post('/', ProdutoController.createProdutos);
+
+router.put('/', ProdutoController.updateProdutos);
+
+router.delete('/', ProdutoController.deleteProduto);
+
 module.exports = router;

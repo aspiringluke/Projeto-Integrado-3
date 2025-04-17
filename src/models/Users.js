@@ -38,7 +38,7 @@ class Users
                     nome: `${newUser.nome}`,
                     email: `${newUser.email}`,
                     senha: `${newUser.senha}`,
-                    funcao_idfuncao: `${newUser.funcao}`
+                    Funcao_idFuncao: `${newUser.idFuncao}`
                 })
                 .into('usuarios');
             return {valid: true};
@@ -73,7 +73,7 @@ class Users
     {
         try {
             let linhasAfetadas = await knex('usuarios')
-                .where({idUsuarios: id})
+                .where({idUsuario: id})
                 .del();
             
             console.log("Linhas afetadas: " + linhasAfetadas);

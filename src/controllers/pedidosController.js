@@ -27,7 +27,7 @@ class PedidoController
         }
     }
 
-    async createUser(req,res)
+    async create(req,res)
         {
             /**
              * Aqui provavelmente vão as verificações

@@ -50,6 +50,13 @@ class Pedidos
         }
     }
 
+    async insertItems(itens)
+    {
+        for(const item of itens){
+
+        }
+    }
+
 
 }
 module.exports = new Pedidos();

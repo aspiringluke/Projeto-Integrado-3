@@ -7,7 +7,7 @@ class Users
     {
         try
         {
-            let users = await knex.select(["idUsuarios","nome","email"]).table("usuarios");
+            let users = await knex.select(["idUsuario","nome","email"]).table("usuarios");
             return {valid: true, values: users};
         } catch (error)
         {
@@ -19,7 +19,7 @@ class Users
     {
         try
         {
-            let user = await knex.select(["idUsuarios","nome","email"]).table("usuarios").where({idUsuarios: id});
+            let user = await knex.select(["idUsuario","nome","email"]).table("usuarios").where({idUsuario: id});
         
         return (user.length > 0)
         ? {valid: true, values: user}
@@ -59,7 +59,7 @@ class Users
         try {
             // deveria enviar de volta os dados para confirmação?
             let linhasAfetadas = await knex('usuarios')
-                .where({idUsuarios: id})
+                .where({idUsuario: id})
                 .update(coluna, novoValor);
             
             console.log("Linhas afetadas: " + linhasAfetadas);

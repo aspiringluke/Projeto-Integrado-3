@@ -50,7 +50,7 @@ class ProdutoControllers
         async updateProdutos(req,res)
             {
                 let result = await Produto.update(
-                    req.body.idprodutos,
+                    req.body.idProduto,
                     req.body.coluna,
                     req.body.valor
                 );

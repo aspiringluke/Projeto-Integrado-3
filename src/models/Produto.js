@@ -6,7 +6,7 @@ class Produto
     {
         try 
         {
-            let produtos = await knex.select(["idprodutos","nome","descricao","valorUnitario"]).table("produtos");
+            let produtos = await knex.select(["idProduto","descricao","unidade","valorUnitario"]).table("produtos");
             return {valid: true, values: produtos};
         } catch (error) 
         {        
@@ -18,7 +18,7 @@ class Produto
     {
         try
         {
-            let produto = await knex.select(["idprodutos","nome","descricao","valorUnitario"]).table("produtos").where({idprodutos: id});
+            let produto = await knex.select(["idProduto","descricao","unidade","valorUnitario"]).table("produtos").where({idproduto: id});
         
             return (produto.length > 0)
             ? {valid: true, values: produto}
@@ -35,8 +35,8 @@ class Produto
         try {
             await knex
                 .insert({
-                    nome: `${newProduto.nome}`,
                     descricao: `${newProduto.descricao}`,
+                    unidade:`${newProduto.unidade}`,
                     valorUnitario: `${newProduto.valorUnitario}`
                 })
                 .into('produtos');
@@ -52,7 +52,7 @@ class Produto
         try {
             // deveria enviar de volta os dados para confirmação?
             let linhasAfetadas = await knex('produtos')
-                .where({idprodutos: id})
+                .where({idProduto: id})
                 .update(coluna, novoValor);
             
             console.log("Linhas afetadas: " + linhasAfetadas);
@@ -66,7 +66,7 @@ class Produto
     {
         try {
             let linhasAfetadas = await knex('produtos')
-                .where({idprodutos: id})
+                .where({idProduto: id})
                 .del();
             
             console.log("Linhas afetadas: " + linhasAfetadas);

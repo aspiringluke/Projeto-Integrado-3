@@ -11,6 +11,8 @@ const PedidoController = require('../controllers/pedidosController');
 
 router.get('/', PedidoController.listAll);
 
-router.get('/:id', PedidoController.listOne)
+router.get('/:id', PedidoController.listOne);
+
+router.post('/', PedidoController.create);
 
 module.exports = router;

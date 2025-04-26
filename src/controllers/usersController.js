@@ -1,4 +1,5 @@
 const Users = require('../models/Users');
+const hashPasswordService = require('../services/hash_password_service');
 
 /**
  * TODO: Adicionar verificações dos parâmetros em todas as queries
@@ -42,7 +43,7 @@ class UsersController
         
         let {nome, email, senha, funcao} = req.body;
 
-        let result = await Users.create(nome, email, senha, funcao);
+        let result = await Users.create(nome, email, hashPasswordService(senha), funcao);
 
         ! (result.valid)
         ? res.status(500).json({success: false, message: result.error})

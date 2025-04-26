@@ -40,7 +40,9 @@ class UsersController
          * o frontend provavelmente já irá verificar de antemão
          */
         
-        let result = await Users.create(req.body);
+        let {nome, email, senha, funcao} = req.body;
+
+        let result = await Users.create(nome, email, senha, funcao);
 
         ! (result.valid)
         ? res.status(500).json({success: false, message: result.error})
@@ -50,35 +52,38 @@ class UsersController
 
     async updateUser(req,res)
     {
-        let result = await Users.update(
-            req.body.idUsuarios,
-            req.body.coluna,
-            req.body.valor
-        );
+        /**
+         * passa o id nos params
+         * atualiza tudo o que não for null
+         */
+        let id = req.params.id;
+        let {nome, email, funcao} = req.body;
 
-        if (!(result.valid)){
-            res.status(500).json({success: false, message: result.error})
+        let result = await Users.update(id, nome, email, funcao);
+
+        if (result.valid){
+            res.status(200).json({success: true, message: `Usuário atualizado com sucesso`});
         }
         else {
-            result.linhasAfetadas == 0
+            result.error === undefined
             ? res.status(404).json({success: false, message: "Não há nenhum usuário com esse ID."})
-            : res.status(200).json({success: true, message: `${req.body.coluna} atualizado(a) com sucesso`});
+            : res.status(500).json({success: false, message: result.error});
         }
     }
 
-
     async deleteUser(req,res)
     {
-        // não seria melhor passar o id como parâmetro?
-        let result = await Users.delete(req.body.id);
+        let id = req.params.id;
 
-        if (!(result.valid)){
-            res.status(500).json({success: false, message: result.error})
-        }
-        else {
-            result.linhasAfetadas == 0
-            ? res.status(404).json({success: false, message: "Não existe nenhum usuário com este ID."})
-            : res.status(200).json({success: true, message: `Deletado(a) com sucesso`});
+        if(isNaN(id))
+        {
+            res.status(406).json({success:false, message: "Parâmetros inválidos"});
+        }else{
+            let result = await Users.delete(id);
+
+            (result.valid)
+            ? res.status(200).json({success: true, message: result.message})
+            : res.status(404).json({success: false, message: result.error});
         }
     }
 }

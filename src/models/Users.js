@@ -30,20 +30,18 @@ class Users
         }
     }
 
-    async create(newUser)
+    async create(nome, email, senha, funcao)
     {
         try {
-            await knex
+            await knex('usuarios')
                 .insert({
-                    nome: `${newUser.nome}`,
-                    email: `${newUser.email}`,
-                    senha: `${newUser.senha}`,
-                    Funcao_idFuncao: `${newUser.idFuncao}`
-                })
-                .into('usuarios');
+                    nome: nome,
+                    email: email,
+                    senha: senha,
+                    Funcao_idFuncao: funcao
+                });
             return {valid: true};
         } catch (error) {
-            console.log(error);
             return {valid: false, error: error};
         }
     }
@@ -54,32 +52,50 @@ class Users
      * ou pelo menos várias iterações.
      * Também é preciso impedir a alteração de IDs
      */
-    async update(id, coluna, novoValor)
+    async update(id, nome, email, funcao)
     {
-        try {
-            // deveria enviar de volta os dados para confirmação?
-            let linhasAfetadas = await knex('usuarios')
-                .where({idUsuario: id})
-                .update(coluna, novoValor);
-            
-            console.log("Linhas afetadas: " + linhasAfetadas);
-            return {valid: true, linhasAfetadas: linhasAfetadas};
-        } catch (error) {
-            return {valid: false, error: error};
+        let user = await this.findById(id);
+        if(user.valid){
+            if(user.values === undefined) return {valid: false, error: undefined};
+            else{
+                let userInfo = {};
+
+                nome !== undefined ? userInfo.nome = nome : null;
+                email !== undefined ? userInfo.email = email : null;
+                funcao !== undefined ? userInfo.funcao = funcao : null;
+
+                try {
+                    await knex('usuarios').update(userInfo).where({idUsuario: id});
+
+                    return {valid: true, message: "Usuário atualizado com sucesso."};
+                } catch (error) {
+                    return {valid: false, error: error};
+                }
+            }
+        }else{
+            return {valid: false, error: user.error}
         }
     }
 
     async delete(id)
     {
-        try {
-            let linhasAfetadas = await knex('usuarios')
-                .where({idUsuario: id})
-                .del();
-            
-            console.log("Linhas afetadas: " + linhasAfetadas);
-            return {valid: true, linhasAfetadas: linhasAfetadas};
-        } catch (error) {
-            return {valid: false, error: error};
+        let user = await this.findById(id);
+
+        if(user.valid){
+            if(user.values !== undefined){
+                try {
+                    await knex("usuarios").delete().where({idUsuario:id});
+                    return {valid: true, message: "Usuário excluído com sucesso."};
+                } catch (error) {
+                    return {valid: false, error: error};
+                }
+            }
+            else{
+                return {valid: false, error: "Usuário não encontrado."}
+            }
+        }
+        else{
+            return {valid: false, error: user.error};
         }
     }
 }

@@ -1,9 +1,12 @@
 const Users = require('../models/Users');
 const hashPasswordService = require('../services/hash_password_service');
-
+const jwt = require('jsonwebtoken');
 /**
  * TODO: Adicionar verificações dos parâmetros em todas as queries
  */
+
+const SECRET = process.env.JWT_SECRET;
+
 
 class UsersController
 {
@@ -87,6 +90,49 @@ class UsersController
             : res.status(404).json({success: false, message: result.error});
         }
     }
+
+
+
+    async loginUser(req, res) {
+        console.log("Rota /user/login acessada!");
+        console.log("Corpo da requisição:", req.body);
+        const { email, senha } = req.body;
+
+      
+        if (!email || !senha) {
+            return res.status(400).json({
+                success: false,
+                message: 'E-mail e senha são obrigatórios.'
+            });
+        }
+
+        try {
+            const result = await Users.login(email, senha);  
+
+            if (result.valid) {
+    
+                res.status(200).json({
+                    success: true,
+                    message: 'Login bem-sucedido.',
+                    token: result.token
+                });
+            } else {
+
+                res.status(401).json({
+                    success: false,
+                    message: result.message || 'Credenciais inválidas.'
+                });
+            }
+        } catch (error) {
+            console.error('Erro no login:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Erro interno no servidor.'
+            });
+        }
+    }    
+
+
 }
 
 module.exports = new UsersController();

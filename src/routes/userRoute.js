@@ -34,4 +34,7 @@ router.put('/', usersController.updateUser);
 
 router.delete('/', usersController.deleteUser);
 
+
+router.post('/login', usersController.loginUser);
+
 module.exports = router;

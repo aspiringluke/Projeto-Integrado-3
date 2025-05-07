@@ -1,9 +1,5 @@
 const knex = require('../config/data');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-
-const SECRET = process.env.JWT_SECRET;
-
+const hashPasswordService = require('../services/hash_password_service');
 
 class Users
 {
@@ -34,16 +30,27 @@ class Users
         }
     }
 
+    async findByEmail(email)
+    {
+        try{
+            let user = await knex('usuarios').select('*').where({email: email});
+
+            return user.length > 0
+            ? {valid: true, values: user[0]}
+            : {valid: false, values: undefined};
+        } catch(error){
+            console.log(error);
+            return {valid: false, message: error};
+        }
+    }
+
     async create(nome, email, senha, funcao) {
         try {
-            // Criptografa a senha antes de salvar no banco
-            const hashedPassword = await bcrypt.hash(senha, 10); // 10 é o número de "salt rounds"
-    
             await knex('usuarios')
                 .insert({
                     nome: nome,
                     email: email,
-                    senha: hashedPassword,
+                    senha: senha,
                     Funcao_idFuncao: funcao
                 });
             return { valid: true };
@@ -104,39 +111,6 @@ class Users
             return {valid: false, error: user.error};
         }
     }
-
-    async login(email, senha) {
-        try {
-            
-            let user = await knex('usuarios').where({ email }).first();
-            
-            if (!user) {
-                return { valid: false, message: 'Usuário não encontrado.' };
-            }
-
-            const isPasswordValid = await bcrypt.compare(senha, user.senha);
-
-            if (!isPasswordValid) {
-                return { valid: false, message: 'Senha incorreta.' };
-            }
-
-            const token = jwt.sign({ id: user.idUsuario, email: user.email }, SECRET, { expiresIn: '1h' });
-
-            return { valid: true, token };
-        } catch (error) {
-            console.error(error);
-            return { valid: false, message: 'Erro interno no servidor.' };
-        }
-    }
-     
-    
 }
-
-
-
-
-
-
-
 
 module.exports = new Users();

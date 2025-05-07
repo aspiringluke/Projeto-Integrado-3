@@ -10,7 +10,7 @@ class Produto
             return {valid: true, values: produtos};
         } catch (error) 
         {        
-            return {valid: false, error: error};
+            return {valid: false, message: error};
         }   
     }
 
@@ -26,53 +26,69 @@ class Produto
         }   
         catch (error)     
         {   
-        return {valid: false, error: error};
+        return {valid: false, message: error};
         }
     }
 
-    async create(newProduto)
+    async create(descricao, unidade, valorUnitario)
     {
         try {
-            await knex
+            await knex('produtos')
                 .insert({
-                    descricao: `${newProduto.descricao}`,
-                    unidade:`${newProduto.unidade}`,
-                    valorUnitario: `${newProduto.valorUnitario}`
-                })
-                .into('produtos');
+                    descricao: descricao,
+                    unidade: unidade,
+                    valorUnitario: valorUnitario
+                });
             return {valid: true};
         } catch (error) {
-            console.log(error);
-            return {valid: false, error: error};
+            return {valid: false, message: error};
         }
     }
 
-    async update(id, coluna, novoValor)
+    async update(id, descricao, unidade, valorUnitario)
     {
-        try {
-            // deveria enviar de volta os dados para confirmação?
-            let linhasAfetadas = await knex('produtos')
-                .where({idProduto: id})
-                .update(coluna, novoValor);
-            
-            console.log("Linhas afetadas: " + linhasAfetadas);
-            return {valid: true, linhasAfetadas: linhasAfetadas};
-        } catch (error) {
-            return {valid: false, error: error};
+        let produto = await this.findById(id);
+        if(produto.valid){
+            if(produto.values === undefined) return {valid: false, message: undefined};
+            else{
+                let produtoInfo = {};
+
+                descricao !== undefined ? produtoInfo.descricao = descricao : null;
+                unidade !== undefined ? produtoInfo.unidade = unidade : null;
+                valorUnitario !== undefined ? produtoInfo.valorUnitario = valorUnitario : null;
+
+                try {
+                    await knex('produtos').update(produtoInfo).where({idProduto: id});
+
+                    return {valid: true, message: "Produto atualizado com sucesso."};
+                } catch (error) {
+                    return {valid: false, message: error};
+                }
+            }
+        }else{
+            return {valid: false, message: produto.error}
         }
     }
 
     async delete(id)
     {
-        try {
-            let linhasAfetadas = await knex('produtos')
-                .where({idProduto: id})
-                .del();
-            
-            console.log("Linhas afetadas: " + linhasAfetadas);
-            return {valid: true, linhasAfetadas: linhasAfetadas};
-        } catch (error) {
-            return {valid: false, error: error};
+        let produto = await this.findById(id);
+
+        if(produto.valid){
+            if(produto.values !== undefined){
+                try {
+                    await knex("usuarios").delete().where({idProduto:id});
+                    return {valid: true, message: "Usuário excluído com sucesso."};
+                } catch (error) {
+                    return {valid: false, message: error};
+                }
+            }
+            else{
+                return {valid: false, message: undefined}
+            }
+        }
+        else{
+            return {valid: false, message: produto.error};
         }
     }
 

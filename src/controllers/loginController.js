@@ -10,20 +10,20 @@ class LoginController
     {
         let {email, senha} = req.body;
 
-        let result = await Users.findByEmail(email);
+        let user = await Users.findByEmail(email);
         
-        if(!(result.valid)){
-            if(result.values === undefined){
+        if(!(user.valid)){
+            if(user.values === undefined){
                 res.status(404).json({success: false, message: "Email não encontrado."});
                 return;
             }
-            res.status(500).json({success: false, message: result.message})
+            res.status(500).json({success: false, message: user.message})
             return;
         }
 
-        let isPasswordCorrect = await comparePasswordService(senha, result.values.senha);
+        let isPasswordCorrect = await comparePasswordService(senha, user.values.senha);
         if(isPasswordCorrect){
-            let token = jwt.sign({email: email}, process.env.SECRET, {expiresIn: 5000});
+            let token = jwt.sign({idUsuario: user.values.idUsuario, email: email}, process.env.SECRET, {expiresIn: 5000});
             res.status(200).json({success: true, token: token});
         }
         else{

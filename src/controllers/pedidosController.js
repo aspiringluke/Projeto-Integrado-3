@@ -11,35 +11,32 @@ class PedidoController
         : res.status(200).json({success: true, values: result.values});
     }
 
-
     async listOne(req,res)
     {
-        let result = await pedidos.findById(req.params.id);
-        if (!(result.valid))
-        {
-            res.status(404).json({success: false, message: result.error})
+        if(isNaN(req.params.id)) {
+            res.status(400).json({success: false, message: "ID inválido."});
         }
-        else
-        {
-            result.values === undefined
-            ? res.status(404).json({success: false, message: "pedido não encontrado."})
-            : res.status(200).json({success: true, values: result.values});
+        else {
+            let result = await pedidos.findById(req.params.id);
+            if (!(result.valid)) {
+                res.status(404).json({success: false, message: result.error})
+            }
+            else {
+                result.values === undefined
+                ? res.status(406).json({success: false, message: "Pedido não encontrado."})
+                : res.status(200).json({success: true, values: result.values});
+            }
         }
     }
 
     async create(req,res)
-        {
-            /**
-             * Aqui provavelmente vão as verificações
-             * de dados mais complexas, considerando que
-             * o frontend provavelmente já irá verificar de antemão
-             */
-            
-            let result = await pedidos.create(req.body);
-    
-            ! (result.valid)
-            ? res.status(500).json({success: false, message: result.error})
-            : res.status(201).json({success: true, message: "Usuário criado com sucesso"});
-        }
+    {
+        let {status, data, idUsuario, idCliente, itens} = req.body;
+		await pedidos.create(status, data, idUsuario, idCliente, itens);
+
+        ! (result.valid)
+        ? res.status(500).json({success: false, message: result.error})
+        : res.status(201).json({success: true, message: "Usuário criado com sucesso"});
+    }
 }
 module.exports = new PedidoController();

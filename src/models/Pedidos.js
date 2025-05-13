@@ -16,8 +16,6 @@ class Pedidos
     }
 
 
-
-
     async findById(id)
     {
         try
@@ -30,51 +28,49 @@ class Pedidos
         }   
         catch (error)     
         {   
-        return {valid: false, error: error};
+            return {valid: false, error: error};
         }
     }
 
-    async create(newPedido)
+    async create(status, data, idUsuario, idCliente, itens)
     {
         try {
-            let idpedido = await knex
-                .insert({
-                    status: `${newPedido.status}`,
-                    data: `${newPedido.data}`,
-                    idUsuario: newPedido.idUsuario,
-                    idCliente: newPedido.idCliente
-                }, ['idPedido'])
-                .into('pedidos');
-            
-            console.log(idpedido);
-            
-            let result = this.insertItems(idpedido, newPedido.itens);
+            let idpedido = await knex('pedidos')
+				.insert({
+					status: status,
+					data: data,
+					Usuario_idUsuario: idUsuario,
+					Cliente_idCliente: idCliente
+			}, ['idPedido']);
+
+			let result = this.insertItems(idpedido, itens);
 
             return result.valid
             ? {valid: true, message: result.message}
             : {valid: false, error: result.error};
-
-            return {valid: true};
         } catch (error) {
             console.log(error);
             return {valid: false, error: error};
         }
     }
 
+    /**
+     * Podemos precisar utilizar dois models: um para os pedidos e um para os itens
+     */
     async insertItems(idpedido, itens)
     {
         try{
             for(const item of itens){
                 await knex('itenspedido')
-                        .insert({
-                            idPedido: idpedido,
-                            idProduto: item.idProduto,
-                            quantidade: item.quantidade,
-                            valorCombinado: item.valorCombinado
-                        });
+                    .insert({
+                        idPedido: idpedido,
+                        idProduto: item.idProduto,
+                        quantidade: item.quantidade,
+                        valorCombinado: item.valorCombinado
+                    });
             }
 
-            return {valid: true, message: "Itens cadastrados."};
+            return {valid: true, message: "Pedido cadastrado."};
         }
         catch(error){
             return {valid:false, error:error};

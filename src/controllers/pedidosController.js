@@ -27,19 +27,17 @@ class PedidoController
         }
     }
 
-    async create(req,res)
-        {
-            /**
-             * Aqui provavelmente vão as verificações
-             * de dados mais complexas, considerando que
-             * o frontend provavelmente já irá verificar de antemão
-             */
-            
-            let result = await pedidos.create(req.body);
-    
-            ! (result.valid)
-            ? res.status(500).json({success: false, message: result.error})
-            : res.status(201).json({success: true, message: "Usuário criado com sucesso"});
+    async create(req, res) {
+        let result = await pedidos.create(req.body);
+
+        if (!result.valid) {
+            res.status(500).json({ success: false, message: result.error });
+        } else {
+            // Retorna o ID do pedido junto com a mensagem de sucesso
+            res.status(201).json({ success: true, message: "Pedido criado com sucesso", idPedido: result.idPedido });
         }
+    }
+
+
 }
 module.exports = new PedidoController();

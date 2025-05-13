@@ -34,32 +34,36 @@ class Pedidos
         }
     }
 
-    async create(newPedido)
-    {
-        try {
-            let idpedido = await knex
-                .insert({
-                    status: `${newPedido.status}`,
-                    data: `${newPedido.data}`,
-                    idUsuario: newPedido.idUsuario,
-                    idCliente: newPedido.idCliente
-                }, ['idPedido'])
-                .into('pedidos');
-            
-            console.log(idpedido);
-            
-            let result = this.insertItems(idpedido, newPedido.itens);
+async create(newPedido) {
+    try {
+        // Inserindo o pedido
+        let idpedido = await knex
+            .insert({
+                status: newPedido.status,
+                data: newPedido.data,
+                idUsuario: newPedido.idUsuario,
+                idCliente: newPedido.idCliente
+            }, ['idPedido'])
+            .into('pedidos');
+        
+        // Pegando o ID do pedido inserido
+        const id = idpedido[0].idPedido;
 
-            return result.valid
-            ? {valid: true, message: result.message}
-            : {valid: false, error: result.error};
+        // Inserindo os itens do pedido
+        let result = await this.insertItems(id, newPedido.itens);
 
-            return {valid: true};
-        } catch (error) {
-            console.log(error);
-            return {valid: false, error: error};
+        // Retornando o resultado da inserção dos itens
+        if (result.valid) {
+            return {valid: true, message: "Pedido e itens cadastrados com sucesso."};
+        } else {
+            return {valid: false, error: result.error};
         }
+    } catch (error) {
+        console.log(error);
+        return {valid: false, error: error};
     }
+}
+
 
     async insertItems(idpedido, itens)
     {

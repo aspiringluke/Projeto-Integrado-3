@@ -23,7 +23,7 @@ class LoginController
 
         let isPasswordCorrect = await comparePasswordService(senha, user.values.senha);
         if(isPasswordCorrect){
-            let token = jwt.sign({idUsuario: user.values.idUsuario, email: email}, process.env.SECRET, {expiresIn: 5000});
+            let token = jwt.sign({idUsuario: user.values.idUsuario, email: email}, process.env.SECRET, {expiresIn: 1440000});
             res.status(200).json({success: true, token: token});
         }
         else{

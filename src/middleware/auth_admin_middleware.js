@@ -2,8 +2,6 @@ require('dotenv').config()
 const jwt = require('jsonwebtoken');
 
 module.exports = function(req,res,next){
-    // pega o cabeçalho com os dados para autenticação
-    console.log(req.headers)
     const auth = req.headers['authorization'];
 
     if(auth !== undefined){

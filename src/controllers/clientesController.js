@@ -7,7 +7,7 @@ class ClientesController
         let todos_clientes = await clientes.findAll();
 
         if(todos_clientes.valid){
-            res.status(200).json({success: true, values: todos_clientes});
+            res.status(200).json({success: true, values: todos_clientes.values});
         }
         else{
             res.status(404).json({success: false, message: todos_clientes.message});

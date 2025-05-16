@@ -52,7 +52,8 @@ class Pedidos
             console.log(error);
             return {valid: false, error: error};
         }
-    }
+}
+
 
     /**
      * Podemos precisar utilizar dois models: um para os pedidos e um para os itens

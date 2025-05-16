@@ -24,7 +24,7 @@ class LoginController
         let isPasswordCorrect = await comparePasswordService(senha, user.values.senha);
         if(isPasswordCorrect){
             let token = jwt.sign({idUsuario: user.values.idUsuario, email: email}, process.env.SECRET, {expiresIn: 1440000});
-            res.status(200).json({success: true, token: token, id: user.values.id});
+            res.status(200).json({success: true, token: token, id: user.values.Funcao_idFuncao});
         }
         else{
             res.status(401).json({success: false, message: "Senha incorreta."});

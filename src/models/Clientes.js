@@ -24,9 +24,17 @@ class Cliente
         }
     }
 
-    async create()
+    async create(nome, cnpj, cep, telefone)
     {
+        try{
+            await knex('clientes').insert({
+                nome: nome, CNPJ: cnpj, CEP: cep, telefone: telefone
+            });
 
+            return {valid: true};
+        }catch(error){
+            return {valid: false, message: "Erro ao cadastrar cliente."};
+        }
     }
 
     async update()

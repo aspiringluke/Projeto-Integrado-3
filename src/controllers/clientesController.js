@@ -30,7 +30,12 @@ class ClientesController
 
     async createCliente(req,res)
     {
+        let { nome, cnpj, cep, telefone } = req.body;
+        let result = await clientes.create(nome,cnpj,cep,telefone);
 
+        result.valid
+        ? res.status(201).json({success: true, message: "Cliente criado com sucesso."})
+        : res.status(500).json({success: false, message: result.message});
     }
 
     async updateCliente(req,res)

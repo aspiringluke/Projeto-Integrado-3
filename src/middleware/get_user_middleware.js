@@ -18,7 +18,7 @@ module.exports = function(req,res,next){
                 return res.status(403).json({success: false, message: "Usuário não autorizado."});
             }
         } catch (error) {
-            return res.status(403).json({success: false, message: "Usuário não autenticado."});
+            return res.status(403).json({success: false, message: "Usuário não autorizado."});
         }
     }else{
         return res.status(403).json({success:false, message: "Usuário não autenticado."});

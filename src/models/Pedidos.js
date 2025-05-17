@@ -1,84 +1,77 @@
 const knex = require('../config/data');
 
-class Pedidos
-{
-    async findAll()
-    {
-        try
-        {
-            let pedidos = await knex.select(['idpedidos', 'status', 'data']).table('pedidos');
-            return {valid: true, values: pedidos};
-        }
-        catch(error)
-        {
-            return {valid: false, error: error};
-        }
-    }
-
-
-    async findById(id)
-    {
-        try
-        {
-            let pedido = await knex.select(["idpedidos","status","data"]).table("pedidos").where({idpedidos: id});
-        
-            return (pedido.length > 0)
-            ? {valid: true, values: pedido}
-            : {valid: true, values: undefined};
-        }   
-        catch (error)     
-        {   
-            return {valid: false, error: error};
-        }
-    }
-
-    async create(status, data, idUsuario, idCliente, itens)
-    {
+class Pedidos {
+    async findAll() {
         try {
-            let idpedido = await knex('pedidos')
-				.insert({
-					status: status,
-					data: data,
-					Usuario_idUsuario: idUsuario,
-					Cliente_idCliente: idCliente
-			}, ['idPedido']);
+            let pedidos = await knex.select(['idPedido', 'status', 'data']).table('pedidos');
+            return { valid: true, values: pedidos };
+        } catch (error) {
+            console.log(error)
+            return { valid: false, message: error };
+        }
+    }
 
-			let result = this.insertItems(idpedido, itens);
+    async findById(id) {
+        try {
+            let pedido = await knex.select(["idPedido", "status", "data"]).table("pedidos").where({ idPedido: id });
+
+            return (pedido.length > 0)
+                ? { valid: true, values: pedido }
+                : { valid: true, values: undefined };
+        }
+        catch (error) {
+            return { valid: false, message: error };
+        }
+    }
+
+    async create(status, data, idUsuario, idCliente, itens) {
+        try {
+            // O insert retorna o id inserido (array no MySQL)
+            let idpedido = await knex('pedidos')
+                .insert({
+                    status: status,
+                    data: data,
+                    Usuario_idUsuario: idUsuario,  // Passa o id do usuário corretamente
+                    Cliente_idCliente: idCliente
+                });
+
+            // Extrai o ID do pedido inserido (pega primeiro elemento do array)
+            const idPedidoInserido = Array.isArray(idpedido) ? idpedido[0] : idpedido;
+
+            // Aguarda inserção dos itens do pedido
+            let result = await this.insertItems(idPedidoInserido, itens);
 
             return result.valid
-            ? {valid: true, message: result.message}
-            : {valid: false, error: result.error};
+                ? { valid: true, message: result.message, idPedido: idPedidoInserido }
+                : { valid: false, error: result.error };
+
         } catch (error) {
             console.log(error);
-            return {valid: false, error: error};
+            return { valid: false, error: error.message || error };
         }
 }
 
 
-    /**
-     * Podemos precisar utilizar dois models: um para os pedidos e um para os itens
-     */
-    async insertItems(idpedido, itens)
-    {
-        try{
-            for(const item of itens){
+    async insertItems(idpedido, itens) {
+        try {
+            console.log(itens)
+            for (const item of itens) {
                 await knex('itenspedido')
                     .insert({
-                        idPedido: idpedido,
-                        idProduto: item.idProduto,
+                        Pedido_idPedido: idpedido,
+                        Produto_idProduto: item.idProduto,
                         quantidade: item.quantidade,
                         valorCombinado: item.valorCombinado
                     });
             }
 
-            return {valid: true, message: "Pedido cadastrado."};
+            return { valid: true, message: "Pedido cadastrado." };
         }
-        catch(error){
-            return {valid:false, error:error};
+        catch (error) {
+            console.log('Erro ao inserir itens:', error);
+            return { valid: false, error: error.message || error };
         }
-
     }
 }
-
 
 module.exports = new Pedidos();

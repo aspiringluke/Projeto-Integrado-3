@@ -35,6 +35,16 @@ class PedidoController {
             : res.status(201).json({ success: true, message: "Pedido criado com sucesso", idPedido: result.idPedido });
     }
 
+    async listPedidosDetalhados(req, res) {
+        const result = await pedidos.findPedidos();
+
+        if (!result.valid) {
+            return res.status(500).json({ success: false, message: result.message });
+        }
+
+        res.status(200).json({ success: true, values: result.values });
+        }
+
 }
 
 module.exports = new PedidoController();

@@ -72,6 +72,29 @@ class Pedidos {
             return { valid: false, error: error.message || error };
         }
     }
+
+
+    async findPedidos() {
+        try {
+            const pedidos = await knex('pedidos')
+            .leftJoin('clientes', 'clientes.idCliente', 'pedidos.Cliente_idCliente')
+            .leftJoin('itenspedido', 'itenspedido.Pedido_idPedido', 'pedidos.idPedido')
+            .select(
+                'pedidos.idPedido',
+                'pedidos.status',
+                'pedidos.data',
+                'clientes.nome as nomeCliente'
+            )
+            .sum('itenspedido.valorCombinado as valorTotal')
+            .groupBy('pedidos.idPedido', 'pedidos.status', 'pedidos.data', 'clientes.nome');
+
+            return { valid: true, values: pedidos };
+
+        } catch (error) {
+            console.error("Erro ao buscar pedidos:", error);
+            return { valid: false, message: error.message || error };
+        }
+    }
 }
 
 module.exports = new Pedidos();

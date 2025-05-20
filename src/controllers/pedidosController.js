@@ -46,6 +46,25 @@ class PedidoController {
         res.status(200).json({ success: true, values: result.values });
     }
 
+    async updateStatus(req, res) 
+    {
+        const id = req.params.id;
+        if(isNaN(id)){
+            return res.status(406).json({success: false, message: "Parâmetro inválido."});
+        }
+        const { status } = req.body;
+
+        try {
+            const resultado = await pedidos.updateStatus(id, status);
+            if (!resultado.valid) {
+                return res.status(500).json({ success: false, message: resultado.message });
+            }
+            return res.status(200).json({ success: true, message: 'Status atualizado com sucesso' });
+        } catch (error) {
+            console.error("Erro no controller updateStatus:", error);
+            return res.status(500).json({ success: false, message: error.message });
+        }
+    }
 }
 
 module.exports = new PedidoController();

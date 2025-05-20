@@ -93,6 +93,28 @@ class Pedidos {
             return { valid: false, message: error.message || error };
         }
     }
+
+    async updateStatus(idPedido, novoStatus) 
+    {
+        try {
+
+            const updated = await knex('pedidos')
+            .where({ idPedido })
+            .update({ status: novoStatus });
+
+
+            if (updated === 0) {
+            return { valid: false, message: "Pedido não encontrado ou status não alterado." };
+            }
+
+            return { valid: true, message: "Status atualizado com sucesso." };
+        } catch (error) {
+            console.error("Erro ao atualizar status do pedido:", error);
+            return { valid: false, message: error.message || error };
+        }
+    }
+
+
 }
 
 module.exports = new Pedidos();

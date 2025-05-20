@@ -21,11 +21,12 @@ class Users
         {
             let user = await knex.select(["idUsuario","nome","email"]).table("usuarios").where({idUsuario: id});
         
-        return (user.length > 0)
-        ? {valid: true, values: user}
-        : {valid: true, values: undefined};
+            return (user.length > 0)
+            ? {valid: true, values: user[0]}
+            : {valid: true, values: undefined};
         } catch (error)
         {
+            console.log(error);
             return {valid: false, error: error};
         }
     }

@@ -1,3 +1,4 @@
 # Lista de tarefas
 
-- POST, PUT e DELETE em cada um dos três recursos: 1/3
+- Fazer um select mais elaborado no GET dos Pedidos para poder pegar o
+valor total, a quantidade total e o nome do cliente

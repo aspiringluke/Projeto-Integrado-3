@@ -6,7 +6,6 @@ class Pedidos {
             let pedidos = await knex.select(['idPedido', 'status', 'data']).table('pedidos');
             return { valid: true, values: pedidos };
         } catch (error) {
-            console.log(error)
             return { valid: false, message: error };
         }
     }
@@ -35,10 +34,8 @@ class Pedidos {
                     Cliente_idCliente: idCliente
                 });
 
-            // Extrai o ID do pedido inserido (pega primeiro elemento do array)
             const idPedidoInserido = Array.isArray(idpedido) ? idpedido[0] : idpedido;
 
-            // Aguarda inserção dos itens do pedido
             let result = await this.insertItems(idPedidoInserido, itens);
 
             return result.valid

@@ -22,9 +22,9 @@ class UsersController
             return;
         }
 
-        let result = await Users.findById();
+        let result = await Users.findById(id);
         if (!(result.valid)){
-            res.status(404).json({success: false, message: result.error})
+            res.status(500).json({success: false, message: result.error})
         }
         else{
             result.values === undefined

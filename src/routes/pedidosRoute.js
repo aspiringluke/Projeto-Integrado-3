@@ -13,6 +13,7 @@ const pedidosController = require('../controllers/pedidosController');
 
 router.get('/detalhados', auth_vendedor, PedidoController.listPedidosDetalhados);
 router.get('/', auth_vendedor, PedidoController.listAll);
+router.put('/:id/status', auth_vendedor, PedidoController.updateStatus);
 router.get('/:id', auth_vendedor, PedidoController.listOne);
 router.post('/', auth_vendedor, PedidoController.create);
 module.exports = router;

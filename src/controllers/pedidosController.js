@@ -56,8 +56,6 @@ class PedidoController {
     try {
         const resultado = await pedidos.updateStatus(id, status); // use o nome correto da função
 
-        console.log("Resultado da atualização:", resultado);
-
         if (!resultado.valid) {
         return res.status(500).json({ success: false, message: resultado.message });
         }

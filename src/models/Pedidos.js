@@ -74,7 +74,8 @@ class Pedidos {
     }
 
 
-    async findPedidos() {
+    async findPedidos() 
+    {
         try {
             const pedidos = await knex('pedidos')
             .leftJoin('clientes', 'clientes.idCliente', 'pedidos.Cliente_idCliente')

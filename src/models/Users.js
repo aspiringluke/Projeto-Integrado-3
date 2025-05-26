@@ -7,7 +7,7 @@ class Users
     {
         try
         {
-            let users = await knex.select(["idUsuario","nome","email"]).table("usuarios");
+            let users = await knex.select(["idUsuario","nome","email", "Funcao_idFuncao"]).table("usuarios");
             return {valid: true, values: users};
         } catch (error)
         {

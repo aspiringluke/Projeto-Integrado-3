@@ -129,7 +129,7 @@ def insercao_fato_vendas(config_RDS, config_redshift):
             INSERT INTO FatoVendas (
                 dimClientes_idCliente, dimProdutos_idProduto,
                 dimEntrega_idEntrega, dimVendedor_idVendedor,
-                quantidade, status, dataVenda, valorTotal
+                quantidade, dataVenda, status, valorTotal
             ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """, tuple(row))
     conn_Redshift.commit()

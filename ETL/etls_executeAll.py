@@ -1,5 +1,7 @@
 import subprocess
 import psycopg2
+import mysql.connector
+import pandas as pd
 
 # Executar os scripts ETL na ordem correta
 scripts_etl = [
@@ -39,7 +41,7 @@ def executar_scripts_etl():
     print("Todos os scripts ETL foram executados com sucesso.\n")
 
 def criar_fato_vendas(config_redshift):
-    print("Conectando ao Redshift para criar fato_vendas...")
+    print("Conectando ao Redshift para criar fatoVendas...")
     conn = psycopg2.connect(**config_redshift)
     cursor = conn.cursor()
 
@@ -68,8 +70,82 @@ def criar_fato_vendas(config_redshift):
         cursor.close()
         conn.close()
 
+def insercao_fato_vendas(config_RDS, config_redshift):
+    print("Conectando ao RDS para buscar os dados necessários para popular fatoVendas...")
+    conn_RDS = mysql.connector.connect(**config_RDS)
+    query = """
+    SELECT 
+        ip.quantidade,
+        ip.valorCombinado,
+        p.data,
+        c.idCliente as idCliente,
+        p.idPedido as idPedido,
+        p.status,
+        pr.idProduto as idProduto,
+        u.idUsuario as idUsuario
+    FROM itensPedido ip
+    JOIN pedidos p ON ip.Pedido_idPedido = p.idPedido
+    JOIN clientes c ON p.Cliente_idCliente = c.idCliente
+    JOIN produtos pr ON ip.Produto_idProduto = pr.idProduto
+    JOIN usuarios u ON p.Usuario_idUsuario = u.idUsuario
+    """
+    df = pd.read_sql(query, conn_RDS)
+    conn_Redshift = psycopg2.connect(**config_redshift)
+    df_dim_cliente = pd.read_sql("SELECT idCliente FROM dimcliente", conn_Redshift)
+    df_dim_entrega = pd.read_sql("SELECT idEntrega FROM dimentrega", conn_Redshift)
+    df_dim_produto = pd.read_sql("SELECT idProduto FROM dimprodutos", conn_Redshift)
+    df_dim_vendedor = pd.read_sql("SELECT idVendedor FROM dimvendedor", conn_Redshift)
+    
+    df.columns = df.columns.str.lower()
+    df_dim_cliente.columns = df_dim_cliente.columns.str.lower()
+    df_dim_produto.columns = df_dim_produto.columns.str.lower()
+    df_dim_entrega.columns = df_dim_entrega.columns.str.lower()
+    df_dim_vendedor.columns = df_dim_vendedor.columns.str.lower()
+
+    df_merge = (
+        df
+        .merge(df_dim_cliente, left_on='idcliente', right_on='idcliente')
+        .merge(df_dim_produto, left_on='idproduto', right_on='idproduto')
+        .merge(df_dim_entrega, left_on='idpedido', right_on='identrega')
+        .merge(df_dim_vendedor, left_on='idusuario', right_on='idvendedor')
+    )
+
+
+    df_fato = df_merge[[
+    'idcliente', 'idproduto', 'identrega', 'idvendedor', 'quantidade', 'data', 'status', 'valorcombinado'
+    ]].rename(columns={
+        'idcliente': 'dimClientes_idCliente',
+        'idproduto': 'dimProdutos_idProduto',
+        'identrega': 'dimEntrega_idEntrega',
+        'idvendedor': 'dimVendedor_idVendedor',
+        'data': 'dataVenda',
+        'valorCombinado': 'valorTotal'
+    })
+
+
+    cursor = conn_Redshift.cursor()
+    for _, row in df_fato.iterrows():
+        cursor.execute("""
+            INSERT INTO FatoVendas (
+                dimClientes_idCliente, dimProdutos_idProduto,
+                dimEntrega_idEntrega, dimVendedor_idVendedor,
+                quantidade, status, dataVenda, valorTotal
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        """, tuple(row))
+    conn_Redshift.commit()
+
+    cursor.close()
+    conn_RDS.close()
+    conn_Redshift.close()
+    
 
 def main():
+    config_RDS = {
+    'host': 'bd-pigrupo5-instance-1.c1kqwwuuk7em.us-east-2.rds.amazonaws.com',
+    'user': 'admin',
+    'password': 'gabriel19072005##',
+    'database': 'sistema_vendas'
+    }
     config_redshift = {
         'database': 'dw_argenzio',
         'user': 'redshiftadmin',
@@ -81,6 +157,7 @@ def main():
     deletar_tabelas(config_redshift)
     executar_scripts_etl()
     criar_fato_vendas(config_redshift)
+    insercao_fato_vendas(config_RDS, config_redshift)
 
 if __name__ == "__main__":
     main()

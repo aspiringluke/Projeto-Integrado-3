@@ -7,7 +7,7 @@ Há um quinto script em Python que utiliza a bibiloteca subprocess para executar
 ![CSV](csv.png)
 
 
-![MongoDB](Mongo.csv)
+![MongoDB](mongo.png)
 
 
 ![PostgreSQL](postgre.png)

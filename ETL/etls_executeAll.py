@@ -54,7 +54,6 @@ def criar_fato_vendas(config_redshift):
             status VARCHAR(20),
             dataVenda DATE,
             valorTotal DECIMAL(10,2),
-            dimEntrega_idEntrega INT,
             dimProdutos_idProduto INT,
             dimClientes_idCliente INT,
             dimVendedor_idVendedor INT
@@ -92,45 +91,54 @@ def insercao_fato_vendas(config_RDS, config_redshift):
     df = pd.read_sql(query, conn_RDS)
     conn_Redshift = psycopg2.connect(**config_redshift)
     df_dim_cliente = pd.read_sql("SELECT idCliente FROM dimcliente", conn_Redshift)
-    df_dim_entrega = pd.read_sql("SELECT idEntrega FROM dimentrega", conn_Redshift)
     df_dim_produto = pd.read_sql("SELECT idProduto FROM dimprodutos", conn_Redshift)
     df_dim_vendedor = pd.read_sql("SELECT idVendedor FROM dimvendedor", conn_Redshift)
     
     df.columns = df.columns.str.lower()
     df_dim_cliente.columns = df_dim_cliente.columns.str.lower()
     df_dim_produto.columns = df_dim_produto.columns.str.lower()
-    df_dim_entrega.columns = df_dim_entrega.columns.str.lower()
     df_dim_vendedor.columns = df_dim_vendedor.columns.str.lower()
 
     df_merge = (
         df
-        .merge(df_dim_cliente, left_on='idcliente', right_on='idcliente')
-        .merge(df_dim_produto, left_on='idproduto', right_on='idproduto')
-        .merge(df_dim_entrega, left_on='idpedido', right_on='identrega')
-        .merge(df_dim_vendedor, left_on='idusuario', right_on='idvendedor')
+        .merge(df_dim_cliente, left_on='idcliente', right_on='idcliente', how='inner')
+        .merge(df_dim_produto, left_on='idproduto', right_on='idproduto', how='inner')
+        .merge(df_dim_vendedor, left_on='idusuario', right_on='idvendedor', how='inner')
     )
 
+    if df_merge.empty:
+       print("DataFrame está vazio!")
+    else:
+
+       print("DataFrame após o merge:")
+       print(df_merge)
 
     df_fato = df_merge[[
-    'idcliente', 'idproduto', 'identrega', 'idvendedor', 'quantidade', 'data', 'status', 'valorcombinado'
+    'idcliente', 'idproduto', 'idvendedor', 'quantidade', 'data', 'status', 'valorcombinado'
     ]].rename(columns={
         'idcliente': 'dimClientes_idCliente',
         'idproduto': 'dimProdutos_idProduto',
-        'identrega': 'dimEntrega_idEntrega',
         'idvendedor': 'dimVendedor_idVendedor',
         'data': 'dataVenda',
-        'valorCombinado': 'valorTotal'
+        'valorcombinado': 'valorTotal'
     })
+    
+    df_fato['dataVenda'] = pd.to_datetime(df_fato['dataVenda']).dt.date
 
+    df_fato = df_fato.dropna(subset=[
+    'dimClientes_idCliente', 'dimProdutos_idProduto',
+    'dimVendedor_idVendedor', 'quantidade', 'dataVenda',
+    'status', 'valorTotal'
+   ])
 
+    
     cursor = conn_Redshift.cursor()
     for _, row in df_fato.iterrows():
         cursor.execute("""
             INSERT INTO FatoVendas (
                 dimClientes_idCliente, dimProdutos_idProduto,
-                dimEntrega_idEntrega, dimVendedor_idVendedor,
-                quantidade, dataVenda, status, valorTotal
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                dimVendedor_idVendedor, quantidade, dataVenda, status, valorTotal
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s)
         """, tuple(row))
     conn_Redshift.commit()
 

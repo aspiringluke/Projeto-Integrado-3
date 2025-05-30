@@ -1,3 +1,5 @@
+# 🧩Modelagem
+
 Na pasta Modelagem, encontra-se o modelo lógico do Data Warehouse do sistema web, bem como o arquivo CSV que é utilizado como uma das quatro fontes externas de dados que alimentam o Data Warehouse.
 
 O modelo lógico define as tabelas essenciais para o armazenamento dos dados relacionados ao registro de pedidos. Sua estrutura foi projetada para representar de forma clara e coerente as relações entre as entidades, viabilizando análises posteriores mais robustas por meio do Data Warehouse.

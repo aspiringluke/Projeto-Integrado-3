@@ -26,9 +26,9 @@ class PedidoController {
 
     async create(req,res)
     {
-        let { idUsuario, status, data, idCliente, itens } = req.body;
+        let { idUsuario, status, dataPedido, idCliente, itens } = req.body;
 
-        let result = await pedidos.create(status, data, idUsuario, idCliente, itens);
+        let result = await pedidos.create(status, dataPedido, idUsuario, idCliente, itens);
 
         !(result.valid)
             ? res.status(500).json({ success: false, message: result.error })

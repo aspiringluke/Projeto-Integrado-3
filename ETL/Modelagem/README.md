@@ -5,5 +5,5 @@ O modelo lógico define as tabelas essenciais para o armazenamento dos dados rel
 O arquivo CSV contém informações relevantes sobre os municípios do estado de São Paulo — principal área de atuação da empresa — incluindo os respectivos códigos de identificação do IBGE, nomes dos municípios e renda per capita associada a cada um. Esses dados desempenham um papel fundamental na contextualização socioeconômica das análises realizadas.
 
 
-![Modelo lógico Data Warehouse](Modelagem/modeloLogicoDW.png)
+![Modelo lógico Data Warehouse](ETL/Modelagem/modeloLogicoDW.png)
 

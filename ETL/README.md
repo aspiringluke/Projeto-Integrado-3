@@ -4,13 +4,9 @@ Os scripts utilizam a biblioteca Pandas para estruturar cada fonte de dados em D
 
 Há um quinto script em Python que utiliza a bibiloteca subprocess para executar os outros scripts de ETL em uma ordem pré-estabelecida de forma automática. Além disso, ao final do script, é criado a tabela fatoVendas e já é programada para ser preenchida com os dados da interface no frontend.
 
-![CSV](csv.png)
+![CSV](csv.png)                       ![MongoDB](mongo.png)
 
-
-![MongoDB](mongo.png)
 
 
 ![PostgreSQL](postgre.png)
 
-
-![BancoAPI](bdApi.png)

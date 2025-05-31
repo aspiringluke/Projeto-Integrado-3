@@ -8,7 +8,7 @@ const doc = {
         title: 'API de Cadastro de Pedidos',
         description: 'Api de cadastro para a Argenzio de Casa Branca'
     },
-    host: 'localhost:4040',
+    host: '3.148.112.54:4040',
     basePath: '/',
     scheme: [],
     consumes: [],

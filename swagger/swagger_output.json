@@ -216,7 +216,7 @@
                 "status": {
                   "example": "any"
                 },
-                "data": {
+                "dataPedido": {
                   "example": "any"
                 },
                 "idCliente": {

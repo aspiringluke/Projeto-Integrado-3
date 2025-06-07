@@ -53,7 +53,7 @@ Para saber mais sobre o Data Warehouse, leia o seu README [aqui](./ETL/Modelagem
 
 ## ⚙ A API
 
-A API utiliza a arquitetura <code style="color:rgb(100,200,100);">REST</code> baseada no modelo <code style="color:rgb(100,200,100);">MVC</code>. Ou seja, ela é acessada através de métodos HTTP, e conta com Controllers para lidar com as requisições e respostas e Models para realizar as operações do banco de dados. O servidor e as rotas são gerenciados pelo <code style="color:rgb(100,200,100);">Express</code>, e o <code style="color:rgb(100,200,100);">SQL</code> é realizado com a ajuda do <code style="color:rgb(100,200,100);">Knex</code>. No que diz respeito aos usuários, as senhas são protegidas utilizando <code style="color:rgb(100,200,100);">bcryptjs</code> e <code style="color:rgb(100,200,100);">jsonwebtoken (JWT)</code>.
+A API utiliza a arquitetura <code style="color:rgb(100,200,100);">REST</code> baseada no modelo <code style="color:rgb(100,200,100);">MVC</code>. Ou seja, ela é acessada através de métodos HTTP, e conta com Controllers para lidar com as requisições e respostas e Models para realizar as operações do banco de dados. O servidor e as rotas são gerenciados pelo <code style="color:rgb(100,200,100);">Express</code>, e as consultas <code style="color:rgb(100,200,100);">SQL</code> é realizado com a ajuda do <code style="color:rgb(100,200,100);">Knex</code>. No que diz respeito aos usuários, as senhas são protegidas utilizando <code style="color:rgb(100,200,100);">bcryptjs</code> e o acesso é validado com <code style="color:rgb(100,200,100);">jsonwebtokens (JWT)</code>.
 
 Para realizar a instalação, primeiro clone este repositório:
 ```sh
